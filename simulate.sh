@@ -1,15 +1,10 @@
 #!/bin/bash
 
-
-if [[ "$1" -eq "" ]]
-then
-    run_id="`ls -t out | head -n 1`"
-else
-    run_id="$1"
-fi
+run_id=$(date +"%Y-%m-%d"="%T")
 
 OUTDIR="out/$run_id"
 
+mkdir -p "${OUTDIR}"
 
 cp "input.in" "${OUTDIR}"
 
@@ -19,4 +14,4 @@ echo -n "Running simulation..."
 
 echo "done!"
 
-mv *.dat $(OUTDIR)
+mv *.dat "${OUTDIR}"

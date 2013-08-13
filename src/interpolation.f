@@ -46,7 +46,7 @@
           e0 = cs_min(ip)
           e1 = cs_max(ip)
 
-          emax = max(maxval(cs_max),e0)
+          emax = max(maxval(cs_max),e1)
           emin = min(minval(cs_min),0.0)
           de = (emax-emin)/(float(nri)-1)
 

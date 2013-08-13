@@ -4,8 +4,8 @@ ext = '.png'
 #set terminal epslatex color size 7cm,5cm solid
 #ext = '.tex'
 
-#srcdir = '../development/'.srcdir.'/'
-srcdir = '../development/'.srcdir.'/'
+#srcdir = srcdir.'/'
+srcdir = srcdir.'/'
 
 infile   = srcdir."input.in"
 datafile = srcdir."simulation.out"

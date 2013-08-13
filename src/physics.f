@@ -148,7 +148,7 @@
           real(REAL64) r, ea, secondary_energy, E
           parameter(E=13)
           r = random_real()
-          secondary_energy = E*tan(atan(ea/E)*r)    
+          secondary_energy = E*tan(atan(ea/(2*E))*r)    
         end function secondary_energy
 
         function velocity(eV)
