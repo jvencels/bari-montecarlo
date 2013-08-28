@@ -2,7 +2,7 @@
         use, intrinsic :: iso_fortran_env, only : REAL64, INT16, INT32, INT64, stdout=>output_unit, stdin=>input_unit
 
 
-        integer NDataFiles
+        integer NDataFiles, simulation_mode
         
         character(len=25), allocatable :: fnames(:)
         integer, allocatable :: nrd(:)
@@ -12,23 +12,36 @@
 
         character(len=*), parameter, public :: paramformat = '((A),(Es9.3),(A8))'
 
-        integer, parameter :: in_f = 11, cs_f = 13, eedf_f = 17, rate_f = 19, pops_f = 23
+        integer, parameter :: in_f = 11, cs_f = 13, eedf_f = 17, rate_f = 19, pops_f = 23, &
+                              totals_f = 27, norm_e_distr_f = 31, convergence_f = 35
 
       contains
 
-        subroutine read_program_input(Nruns, tfin, dt, e0, p, Npops, neexpr)
+        ! =======================================================
+
+        subroutine read_program_input(simulation_mode, tfin, dt, e0, p, Npops, neexpr)
 
           implicit none
 
           integer row, col, i
-          integer(INT64) Nruns
-          real(REAL64) tfin, dt, e0, p, NRunsreal
-          integer Npops
+          !integer(INT64) Nruns
+          real(REAL64) tfin, dt, e0, p!, NRunsreal
+          integer Npops, simulation_mode
           character(len=*) neexpr
 
-          read(stdin,*) NRunsreal, tfin, dt, e0, p
+          ! Simulation mode (0=stationary, 1=non-stationary), particle initialization
+          ! expression, finishing time of the simulation, time step, initial energy of
+          ! the electrons, Nitrogen gas pressure.
+          read(stdin,*) simulation_mode, neexpr, tfin, dt, e0, p
 
-          read(stdin,*) neexpr
+          if (simulation_mode .eq. 0) then
+            write(stdout,*) "===== Stationary mode ====="
+          else if (simulation_mode .eq. 1) then
+            write(stdout,*) "===== Non-stationary mode ====="
+          else
+            write(stdout,*) "Error: wrong simulation mode, choose 0 for stationary and 1 for non-stationary"
+            stop
+          endif
 
           read(stdin,*) NDataFiles, Npops
           
@@ -44,12 +57,11 @@
 
           read(stdin,*) fnames
 
+          !Nruns = int(NRunsreal)
 
-          Nruns = int(NRunsreal)
-
-          if (NRunsreal .gt. huge(NRunsreal)) then
-            write(stdout,*) "# WARNING: overflow in input N - lower the number of simulated particles!"
-          end if
+          !if (NRunsreal .gt. huge(NRunsreal)) then
+          !  write(stdout,*) "# WARNING: overflow in input N - lower the number of simulated particles!"
+          !end if
 
           ! first pass over data files: count line numbers
           do i=1, NDataFiles
@@ -73,6 +85,8 @@
           raw(:,2,:) = raw(:,2,:)*1.0e-4 
         end subroutine read_program_input
 
+        ! =======================================================
+
         subroutine clean_up_io()
           implicit none
 
@@ -83,6 +97,8 @@
           deallocate(productsraw)
           deallocate(raw)
         end subroutine clean_up_io
+
+        ! =======================================================
 
         function lines_in_file(fname)
           implicit none
@@ -104,6 +120,8 @@
             close(20)
         end function lines_in_file
 
+        ! =======================================================
+
         function padr(string, length) result(r)
           character(len=*) :: string
           integer          :: length
@@ -111,5 +129,7 @@
 
           r = adjustl(string)
         end function padr
+
+        ! =======================================================
 
       end module io

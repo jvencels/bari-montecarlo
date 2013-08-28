@@ -1,7 +1,10 @@
       module random
         use, intrinsic :: iso_fortran_env, only : REAL64, INT16, INT32, INT64
         use, intrinsic :: iso_c_binding, only : C_INT128_T
+
       contains
+
+        ! =======================================================
 
         function random_real()
           ! Abstraction over rand(), in case I find a better option
@@ -11,6 +14,8 @@
 
           random_real = rand()
         end function random_real
+
+        ! =======================================================
 
         function random_von_Neumann()
           ! Gets a random number from the probability distribution
@@ -24,6 +29,8 @@
           r = random_real()*300
           random_von_Neumann =  1/(1+(r/E)**2)
         end function random_von_Neumann
+
+        ! =======================================================
         
 !         subroutine seed_rand()
 !           ! Use MPI to find a representation of the wall time that changes
@@ -46,6 +53,8 @@
 !           ! Use the rapidly-changing number as seed for rand()
 !           call srand(t)
 !         end subroutine seed_rand
+
+        ! =======================================================
         
         subroutine seed_rand_0()
           ! Call srand() with a constant seed, to be used for testing or
@@ -55,5 +64,7 @@
           implicit none
           call srand(0)
         end subroutine seed_rand_0
+
+        ! =======================================================
 
       end module random

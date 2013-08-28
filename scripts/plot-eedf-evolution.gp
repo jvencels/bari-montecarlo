@@ -1,21 +1,27 @@
 load 'scripts/plot-common.gp'
 
+#tiny=1
+minimum=1E-5
+
 set output srcdir.'eedf-evolution'.ext
-set logscale z
+set logscale y
+set yrange [minimum:1]
 
-set view 80, 15
+#set key center top
 
-set ylabel 't'
-set xlabel 'e' offset graph -0.01,-.4,0
-set zlabel 'eedf' rotate by 90
-set xtics 250 format "%.0f" rotate by -30 offset graph 0.01,-0.2,0
-set ytics 5e-9 format "%.0s" rotate by -30
-set ztics format "%.0te%T"
-set xyplane .0
-unset key
+#ts = system("awk '{ print $1 }' ".srcdir."eedf.dat | uniq | awk '{for (i=1; i<20; i++) {if (NR==i*i+1) {print $1}}}'")
 
-ts = system("awk '{ print $1 }' ".srcdir."eedf.dat | uniq | tac")
+ts = system("awk '{ print $1 }' ".srcdir."eedf.dat | uniq | awk 'NR==2; END{print}'")
+
 thistime(t) = '<awk ''/^ '.t.'/'' '.srcdir.'eedf.dat'
 
-splot for [t in ts] thistime(t) u 2:1:3 w lines notitle # , \
-#      for [i=20:10:-1] awkcmd(i,7).datafile u 3:2:4 w lines notitle
+set xrange [-10:1010]
+set yrange [1e-9:1]
+
+set ylabel 'EEDF'
+
+set xlabel  'Energy [eV]'
+
+
+plot for [t in ts] thistime(t) u 2:3 w linespoints notitle
+

@@ -9,7 +9,7 @@ fi
 
 OUTDIR="out/$run_id"
 
-declare -a scripts=("eedf-evolution" "ratecoeffs" "ratequote" "populations")
+declare -a scripts=("eedf-evolution" "ratecoeffs" "ratequote" "populations" "totals" "norm-e-distr" "convergence")
 
 echo "Working with run id: ${run_id}"
 

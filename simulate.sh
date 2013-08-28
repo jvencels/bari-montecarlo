@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 run_id=$(date +"%Y-%m-%d"="%T")
 

@@ -22,6 +22,8 @@
 
       contains
 
+        ! =======================================================
+
         subroutine init_pops()
           use io, only : Araw, Qraw
           implicit none
@@ -36,6 +38,8 @@
           call parsef(1, neexpr, (/ 't' /))
 
         end subroutine init_pops
+
+        ! =======================================================
 
         subroutine calculate_pops()
           use physics, only : tfin
@@ -71,6 +75,8 @@
           end do
         end subroutine calculate_pops
 
+        ! =======================================================
+
         subroutine print_pops()
           use io, only : pops_f
           implicit none
@@ -85,6 +91,8 @@
 
           close(pops_f)
         end subroutine print_pops
+
+        ! =======================================================
 
         function f(t,pops)
           use ratecoeffs, only : ratecoeff
@@ -101,9 +109,13 @@
           f = ne*(/ (ratecoeff(t, ip),ip=2,Npops+1) /)*n - (Q*n+A)*pops
         end function f
 
+        ! =======================================================
+
         subroutine clean_up_pops()
           implicit none
           deallocate(pops,A,Q)
         end subroutine clean_up_pops
+
+        ! =======================================================
+
       end module populations
-        
