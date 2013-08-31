@@ -28,5 +28,5 @@ set key outside above
 plot srcdir.'totals.dat' \
         u 1:2 w lines lt 1 lc rgb "red" notitle, \
     ''  u 1:3 axes x1y2 w lines lt 1 lc rgb "green" notitle, \
-    ''  u 1:4 axes x1y2 w lines lt 1 lc rgb "blue" notitle, \
+    ''  u 1:($4*20) axes x1y2 w lines lt 1 lc rgb "blue" notitle, \
     ''  u 1:5 axes x1y2 w lines lt 1 lc rgb "black" notitle
