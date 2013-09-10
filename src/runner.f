@@ -1,19 +1,19 @@
       program run_simulation
         use, intrinsic :: iso_fortran_env, only : REAL64, INT16, INT32, INT64, stdout=>output_unit
 
-        use io, only : NDataFiles, read_program_input, clean_up_io, paramformat, padr
-        use physics, only : p, init_physics, NCollProc, dt, tfin, n
+        use io, only : NDataFiles, read_program_input, clean_up_io, paramformat, padr, simulation_mode
+        use physics, only : p, init_physics, NCollProc, dt, tfin, n, total_collision_frequency
         use interpolation, only : nri, init_interpolation, interpolate, clean_up_interp
         use random, only : seed_rand_0
-        use single_particle, only : onepart, e0
-        use eedf, only : init_eedfbins, Ntimes, calculate_totals, print_eedf
+        use particles, only : simulate, e0
+        use eedf, only : init_eedfbins, Ntimes, calculate_totals, print_eedf, recycled_e
         use ratecoeffs, only : calculate_ratecoeffs_evolution, print_ratecoeffs, clean_up_ratecoeffs
         use populations, only : calculate_pops, print_pops, clean_up_pops, init_pops, Npops, neexpr
 
         implicit none
 
         ! VARIABLE DECLARATIONS       
-        integer(INT64) Nruns, i
+        integer(INT64) i
         integer :: clock_start, clock_end, clock_rate
         !
 
@@ -24,7 +24,7 @@
           call system_clock(count=clock_start)
 
           ! get input from stdin        
-          call read_program_input(Nruns, tfin, dt, e0, p, Npops, neexpr)
+          call read_program_input(simulation_mode, tfin, dt, e0, p, Npops, neexpr)
           
           ! initialize cross-section interpolations and population ODE's
           call init_interpolation()
@@ -59,15 +59,10 @@
 
         ! SIMULATION
 
-          ! split work on all threads
-          do i=1, Nruns
-            call onepart()
-          end do
-          
-        ! POST PROCESSING
+          ! Main simulation, @particles
+          call simulate()
 
-          ! summarize eedf
-          call calculate_totals()
+        ! POST PROCESSING
 
           call print_eedf()
 
@@ -84,7 +79,6 @@
           ! stop timer
           call system_clock(count=clock_end)
           write(stdout,paramformat) padr('It took', 30), (clock_end-clock_start)/real(clock_rate,REAL64), padr("s", 5)
-
         ! CLEAN UP
           !  deallocate(bins)g
           call clean_up_interp()

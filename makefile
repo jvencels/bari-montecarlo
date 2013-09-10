@@ -8,7 +8,7 @@ FFLAGS		:=	-O3 -g -static -static-libgcc -static-libgfortran -Wall -Warray-bound
 INFILE 		:= 	input.in
 
 # All modules
-OBJS		:= $(BINDIR)/parameters.o $(BINDIR)/fparser.o $(BINDIR)/io.o $(BINDIR)/random.o $(BINDIR)/physics.o $(BINDIR)/interpolation.o $(BINDIR)/eedf.o $(BINDIR)/ratecoeffs.o $(BINDIR)/single_particle.o $(BINDIR)/populations.o 
+OBJS		:= $(BINDIR)/random.o $(BINDIR)/parameters.o $(BINDIR)/fparser.o $(BINDIR)/io.o $(BINDIR)/physics.o $(BINDIR)/eedf.o $(BINDIR)/interpolation.o $(BINDIR)/ratecoeffs.o $(BINDIR)/particles.o $(BINDIR)/populations.o 
 
 # Default rule
 all: runner | $(BINDIR)

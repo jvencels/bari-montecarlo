@@ -9,7 +9,10 @@
         public :: calculate_ratecoeffs_evolution, ratecoeff
         public :: print_ratecoeffs
         public :: clean_up_ratecoeffs
+
       contains
+
+        ! =======================================================
 
         subroutine calculate_ratecoeffs_evolution()
           use eedf, only : Needfbins, Ntimes
@@ -26,6 +29,7 @@
 
         end subroutine calculate_ratecoeffs_evolution
 
+        ! =======================================================
 
         subroutine print_ratecoeffs()
           use eedf, only : Ntimes
@@ -44,6 +48,8 @@
             write(rate_f,*), t, k(it,:)*1e6 ! convert to cm^3/s
           end do
         end subroutine print_ratecoeffs
+
+        ! =======================================================
 
         subroutine calculate_ratecoeffs(it)
           use eedf, only : Needfbins, de
@@ -67,6 +73,8 @@
           end do
         end subroutine calculate_ratecoeffs
 
+        ! =======================================================
+
         function ratecoeff(t, ip)
           use physics, only : dt, tfin
           use eedf, only : Ntimes
@@ -89,6 +97,8 @@
           end if
         end function ratecoeff
 
+        ! =======================================================
+
         function integrand(ip, it, ie)
           use eedf, only : eedfbins, de
           use physics, only : cross_section
@@ -102,9 +112,13 @@
                       ! e        f(e)               sigma(e)         
         end function integrand
 
+        ! =======================================================
+
         subroutine clean_up_ratecoeffs()
           implicit none
           deallocate(k)
         end subroutine clean_up_ratecoeffs
+
+        ! =======================================================
 
       end module ratecoeffs
