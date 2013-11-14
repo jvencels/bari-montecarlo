@@ -1,3 +1,10 @@
+Original code written by Tomas Lycken.
+
+Some additional modifications done by Juris Vencels.
+
+------------------------------------------------
+
+
 # Reasearch project in Bari, spring 2013
 
 
